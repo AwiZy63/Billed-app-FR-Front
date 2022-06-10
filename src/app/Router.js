@@ -10,6 +10,7 @@ import DashboardUI from "../views/DashboardUI.js"
 import { ROUTES, ROUTES_PATH } from "../constants/routes.js"
 
 export default () => {
+
   const rootDiv = document.getElementById('root')
   rootDiv.innerHTML = ROUTES({ pathname: window.location.pathname })
 
@@ -23,6 +24,7 @@ export default () => {
     if (pathname === ROUTES_PATH['Login']) {
       rootDiv.innerHTML = ROUTES({ pathname })
       document.body.style.backgroundColor="#0E5AE5"
+
       new Login({ document, localStorage, onNavigate, PREVIOUS_LOCATION, store })
     } else if (pathname === ROUTES_PATH['Bills']) {
       rootDiv.innerHTML = ROUTES({ pathname, loading: true })

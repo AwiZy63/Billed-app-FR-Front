@@ -1,7 +1,6 @@
 
 import { ROUTES_PATH } from '../constants/routes.js'
 export let PREVIOUS_LOCATION = ''
-
 // we use a class so as to test its methods in e2e tests
 export default class Login {
   constructor({ document, localStorage, onNavigate, PREVIOUS_LOCATION, store }) {
@@ -10,13 +9,14 @@ export default class Login {
     this.onNavigate = onNavigate
     this.PREVIOUS_LOCATION = PREVIOUS_LOCATION
     this.store = store
-    const formEmployee = this.document.querySelector(`form[data-testid="form-employee"]`)
+    const formEmployee = this.document.querySelector(`[data-testid="form-employee"]`)
     formEmployee.addEventListener("submit", this.handleSubmitEmployee)
-    const formAdmin = this.document.querySelector(`form[data-testid="form-admin"]`)
+    const formAdmin = this.document.querySelector(`[data-testid="form-admin"]`)
     formAdmin.addEventListener("submit", this.handleSubmitAdmin)
   }
   handleSubmitEmployee = e => {
     e.preventDefault()
+
     const user = {
       type: "Employee",
       email: e.target.querySelector(`input[data-testid="employee-email-input"]`).value,
@@ -25,15 +25,15 @@ export default class Login {
     }
     this.localStorage.setItem("user", JSON.stringify(user))
     this.login(user)
+    .then(() => {
+      this.onNavigate(ROUTES_PATH['Bills'])
+      this.PREVIOUS_LOCATION = ROUTES_PATH['Bills']
+      PREVIOUS_LOCATION = this.PREVIOUS_LOCATION
+      this.document.body.style.backgroundColor="#fff"
+    })
       .catch(
         (err) => this.createUser(user)
       )
-      .then(() => {
-        this.onNavigate(ROUTES_PATH['Bills'])
-        this.PREVIOUS_LOCATION = ROUTES_PATH['Bills']
-        PREVIOUS_LOCATION = this.PREVIOUS_LOCATION
-        this.document.body.style.backgroundColor="#fff"
-      })
 
   }
 
@@ -41,8 +41,8 @@ export default class Login {
     e.preventDefault()
     const user = {
       type: "Admin",
-      email: e.target.querySelector(`input[data-testid="employee-email-input"]`).value,
-      password: e.target.querySelector(`input[data-testid="employee-password-input"]`).value,
+      email: e.target.querySelector(`input[data-testid="admin-email-input"]`).value,
+      password: e.target.querySelector(`input[data-testid="admin-password-input"]`).value,
       status: "connected"
     }
     this.localStorage.setItem("user", JSON.stringify(user))
